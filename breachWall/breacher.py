@@ -9,6 +9,7 @@
 # set image
 #   accordingly to env
 
+import venv
 import ctypes
 import os
 import struct
@@ -52,20 +53,29 @@ def get_desktop_environment(self):
 
 def get_wall(wall_type):
     url = 'https://ih0.redbubble.net/image.702318777.9332/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg'
-        # 'https://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg'
+        # eye 'https://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg'
     if wall_type == 'w':
-        wget.download(url, 'C://Users/Public/hen.jpg')
         wall_path = 'C://Users/Public/hen.jpg'
-        # wget.download(url, 'C://Users/kmcho/Downloads/hen.jpg')
-        # wall_path = 'C://Users/kmcho/Downloads/hen.jpg'
+        if not os.path.isfile(wall_path):
+            wget.download(url, 'C://Users/Public/hen.jpg')
+            # wget.download(url, 'C://Users/kmcho/Downloads/hen.jpg')
+            # wall_path = 'C://Users/kmcho/Downloads/hen.jpg'
     elif wall_type == 'u':
-        wget.download(url, '/home/caleb/test_downloads/hen.jpg')
         wall_path = '/home/caleb/test_downloads/hen.jpg'
+        if not os.path.isfile(wall_path):
+            wget.download(url, '/home/caleb/test_downloads/hen.jpg')
     return wall_path
 
 
+### retract begin ####
+def retract(wall_type):
+    if wall_type == 'w':
+        windows_breacher('C://Users/kmcho/OneDrive/Pictures/dokkaebi_drawing.png')
+#### retract end ###
+
+
 def breach_wall():
-    wall_type = input("which os?")
+    wall_type = input("which os? \n")
     if wall_type == 'w':
         print("getting wall...")
         wall_path = get_wall(wall_type)
@@ -82,6 +92,12 @@ def breach_wall():
         gnome_breacher()
         # set_wallpaper(wall_path)
         print("wall breached!")
+    elif wall_type == 'r':
+        retract_wall_type = input("Which type? \n")
+        print("retracting...")
+        if wall_type == 'r' and retract_wall_type == 'w':
+            retract(retract_wall_type)
+            print("retracted!")
 
 
 ### gnome breacher begin ###
