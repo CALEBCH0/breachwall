@@ -8,7 +8,7 @@
 #   download
 # set image
 #   accordingly to env
-
+import platform
 import venv
 import ctypes
 import os
@@ -54,13 +54,13 @@ def get_desktop_environment(self):
 def get_wall(wall_type):
     url = 'https://ih0.redbubble.net/image.702318777.9332/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg'
         # eye 'https://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg'
-    if wall_type == 'w':
+    if wall_type == 'Windows':
         wall_path = 'C://Users/Public/hen.jpg'
         if not os.path.isfile(wall_path):
             wget.download(url, 'C://Users/Public/hen.jpg')
             # wget.download(url, 'C://Users/kmcho/Downloads/hen.jpg')
             # wall_path = 'C://Users/kmcho/Downloads/hen.jpg'
-    elif wall_type == 'u':
+    elif wall_type == 'Linux':
         wall_path = '/home/caleb/test_downloads/hen.jpg'
         if not os.path.isfile(wall_path):
             wget.download(url, '/home/caleb/test_downloads/hen.jpg')
@@ -69,35 +69,25 @@ def get_wall(wall_type):
 
 ### retract begin ####
 def retract(wall_type):
-    if wall_type == 'w':
+    if wall_type == 'Windows':
         windows_breacher('C://Users/kmcho/OneDrive/Pictures/dokkaebi_drawing.png')
 #### retract end ###
 
 
 def breach_wall():
-    wall_type = input("which os? \n")
-    if wall_type == 'w':
-        print("getting wall...")
-        wall_path = get_wall(wall_type)
-        print("got it!")
-        print("breaching wall...")
-        windows_breacher(wall_path)
-        # set_wallpaper(wall_path)
-        print("wall breached!")
-    elif wall_type == 'u':
-        print("getting wall...")
-        wall_path = get_wall(wall_type)
-        print("got it!")
-        print("breaching wall...")
-        gnome_breacher()
-        # set_wallpaper(wall_path)
-        print("wall breached!")
-    elif wall_type == 'r':
-        retract_wall_type = input("Which type? \n")
+    startup = input("start")
+    if startup == 'k':
+        set_wallpaper()
+    elif startup == 'r':
+        wall_type = platform.system()
         print("retracting...")
-        if wall_type == 'r' and retract_wall_type == 'w':
-            retract(retract_wall_type)
+        if startup == 'r':
+            retract(wall_type)
             print("retracted!")
+        else:
+            print("error")
+    else:
+        print("error")
 
 
 ### gnome breacher begin ###
@@ -115,50 +105,21 @@ def windows_breacher(file_loc):
 
 
 ### adaptive breacher begin ####
-def set_wallpaper(self, file_loc, first_run):
-    # Note: There are two common Linux desktop environments where
-    # I have not been able to set the desktop background from
-    # command line: KDE, Enlightenment
-    desktop_env = self.get_desktop_environment()
-    try:
-        if desktop_env in ["gnome", "unity", "cinnamon"]:
-            uri = "'file://%s'" % file_loc
-            try:
-                SCHEMA = "org.gnome.desktop.background"
-                KEY = "picture-uri"
-                gsettings = Gio.Settings.new(SCHEMA)
-                gsettings.set_string(KEY, uri)
-            except:
-                args = ["gsettings", "set", "org.gnome.desktop.background", "picture-uri", uri]
-                subprocess.Popen(args)
-        elif desktop_env == "gnome2":  # Not tested
-            args = ["gconftool-2", "-t", "string", "--set", "/desktop/gnome/background/picture_filename",
-                    '"%s"' % file_loc]
-            subprocess.Popen(args)
-        elif desktop_env == "windows":
-            SPI_SETDESKWALLPAPER = 20
-            ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, file_loc, 0)
-        # elif desktop_env=="mac":
-        #    try:
-        #        app('Finder').desktop_picture.set(mactypes.File(file_loc))
-        #     except ImportError:
-        #        #import subprocess
-        #        SCRIPT = """/usr/bin/osascript<<END
-        #        tell application "Finder" to
-        #         set desktop picture to POSIX file "%s"
-        #        end tell
-        #        END"""
-        #        subprocess.Popen(SCRIPT%file_loc, shell=True)
-        # else:
-        #     if first_run:  # don't spam the user with the same message over and over again
-        #         sys.stderr.write("Warning: Failed to set wallpaper. Your desktop environment is not supported.")
-        #         # sys.stderr.write("You can try manually to set Your wallpaper to %s" % file_loc)
-        #     return False
-        # return True
-    except:
-        sys.stderr.write("ERROR: Failed to set wallpaper. There might be a bug.\n")
-        return False
-
+def set_wallpaper():
+    wall_type = platform.system()
+    print("getting wall...")
+    wall_path = get_wall(wall_type)
+    print("got it!")
+    print("breaching wall...")
+    if wall_type == 'Windows':
+        windows_breacher(wall_path)
+        print("wall breached!")
+    elif wall_type == 'linux':
+        gnome_breacher(wall_path)
+        print("wall breached!")
+    elif wall_type == 'Darwin':
+        print("unavailable")
+    print(wall_type)
 
 # def get_config_dir(self, app_name=APP_NAME):
 #     if "XDG_CONFIG_HOME" in os.environ:
