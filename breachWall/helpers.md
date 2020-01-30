@@ -313,3 +313,4 @@ conf.set_string('/desktop/gnome/background/picture_filename', '/path/to/filename
 ### gnome desktop end ###
 
 ## pathToBmp = os.path.normpath(C:/Users/kookm_000/Desktop/wallpapers/qR6X0VG.png") adjust the path
+feh --bg

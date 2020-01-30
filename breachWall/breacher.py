@@ -50,22 +50,37 @@ def get_desktop_environment(self):
 ### desktop environment end ###
 
 
-def get_wall():
+def get_wall(wall_type):
     print("getting wall...")
-    url = 'https://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg'
-    wget.download(url, '/home/caleb/test_downloads/eye.jpg')
-    wall_path = '/home/caleb/test_downloads/eye.jpg'
+    url = 'https://ih0.redbubble.net/image.702318777.9332/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg'
+        # 'https://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg'
+    if wall_type == 'w':
+        wget.download(url, 'C://Users/kmcho/Downloads/hen.jpg')
+        wall_path = 'C://Users/kmcho/Downloads/hen.jpg'
+    elif wall_type == 'u':
+        wget.download(url, '/home/caleb/test_downloads/hen.jpg')
+        wall_path = '/home/caleb/test_downloads/hen.jpg'
     return wall_path
 
 
 def breach_wall():
-    print("getting wall...")
-    wall_path = get_wall()
-    print("got it!")
-    print("breaching wall...")
-    print(gnome_breacher())
-    # set_wallpaper(wall_path)
-    print("wall breached!")
+    wall_type = input("which os?")
+    if wall_type == 'w':
+        print("getting wall...")
+        wall_path = get_wall(wall_type)
+        print("got it!")
+        print("breaching wall...")
+        windows_breacher(wall_path)
+        # set_wallpaper(wall_path)
+        print("wall breached!")
+    elif wall_type == 'u':
+        print("getting wall...")
+        wall_path = get_wall(wall_type)
+        print("got it!")
+        print("breaching wall...")
+        gnome_breacher()
+        # set_wallpaper(wall_path)
+        print("wall breached!")
 
 
 ### gnome breacher begin ###
@@ -74,9 +89,11 @@ def gnome_breacher():
 #### gnome breacher end ###
 
 
-### windows braecher begin ###
-def windows_breacher():
-    return True
+### windows breacher begin ###
+def windows_breacher(file_loc):
+    SPI_SETDESKWALLPAPER = 20
+    wall_path = os.path.normpath(file_loc)
+    ctypes.windll.user32.SystemParametersInfoW(20, 0, wall_path, 0)
 ### windows breacher end ###
 
 

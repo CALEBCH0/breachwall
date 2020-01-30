@@ -10,14 +10,14 @@ import gconf
 import wget
 from os import walk, getenv, system
 from shutil import copyfile
-from PIL import Image
+# from PIL import Image
 
 import breachWall.breacher
 
 
 def main():
-    breachWall.breacher.runit()
-    # breachWall.breacher.breach_wall()
+    # breachWall.breacher.runit()
+    breachWall.breacher.breach_wall()
 
 
 if __name__ == '__main__':
