@@ -51,12 +51,11 @@ def get_desktop_environment(self):
 
 
 def get_wall(wall_type):
-    print("getting wall...")
     url = 'https://ih0.redbubble.net/image.702318777.9332/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg'
         # 'https://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg'
     if wall_type == 'w':
-        wget.download(url, '/c/hen.jpg')
-        wall_path = '/c/hen.jpg'
+        wget.download(url, 'C://Users/Public/hen.jpg')
+        wall_path = 'C://Users/Public/hen.jpg'
         # wget.download(url, 'C://Users/kmcho/Downloads/hen.jpg')
         # wall_path = 'C://Users/kmcho/Downloads/hen.jpg'
     elif wall_type == 'u':
