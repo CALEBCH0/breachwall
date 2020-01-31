@@ -4,7 +4,7 @@ import os
 import sys
 # import gconf
 import wget
-
+from PIL import Image
 
 def get_wall(wall_type):
     url = 'https://i.imgur.com/WpZuQvO.png'
@@ -14,19 +14,29 @@ def get_wall(wall_type):
         if os.path.isfile(wall_path):
             os.remove(wall_path)
         wget.download(url, wall_path)
+        # stretch_wall(wall_path)
     elif wall_type == 'Linux':
         wall_path = 'hoem/caleb/test_downloads/hen.jpg'
         if os.path.isfile(wall_path):
             os.remove(wall_path)
         wget.download(url, wall_path)
+        # stretch_wall(wall_path)
     else:
         print("get_wall_error")
     return wall_path
 
 
+# TODO: no matter what size I use, same on desktop
+def stretch_wall(wall_path):
+    image = Image.open(wall_path)
+    image = image.resize((200, 200), Image.ANTIALIAS)
+    os.remove(wall_path)
+    image = image.save(wall_path)
+
+
 def retract(wall_type):
     if wall_type == 'Windows':
-        windows_breacher('C://Users/kmcho/OneDrive/Pictures/ELADISTORT.png')
+        windows_breacher('C://Users/kmcho/OneDrive/Pictures/dokkaebi_drawing.png')
     elif wall_type == 'Linux':
         print("unavailable")
     elif wall_type == 'Darwin':
@@ -61,7 +71,7 @@ def set_wallpaper():
     wall_type = platform.system()
     print("getting wall...")
     wall_path = get_wall(wall_type)
-    print("got it.")
+    print("\n got it.")
     print("breaching wall...")
     if wall_type == 'Windows':
         windows_breacher(wall_path)
