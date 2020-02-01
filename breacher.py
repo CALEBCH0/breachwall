@@ -7,14 +7,14 @@ import wget
 from PIL import Image
 
 def get_wall(wall_type):
-    url = 'https://i.imgur.com/WpZuQvO.png'
-    # 'https://ih0.redbubble.net/image.702318777.9332/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg'
+    url = 'https://ih0.redbubble.net/image.702318777.9332/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg'
+    # 'https://i.imgur.com/WpZuQvO.png'
     if wall_type == 'Windows':
         wall_path = 'C://Users/Public/hen.jpg'
         if os.path.isfile(wall_path):
             os.remove(wall_path)
         wget.download(url, wall_path)
-        # stretch_wall(wall_path)
+        stretch_wall(wall_path)
     elif wall_type == 'Linux':
         wall_path = 'hoem/caleb/test_downloads/hen.jpg'
         if os.path.isfile(wall_path):
@@ -26,12 +26,13 @@ def get_wall(wall_type):
     return wall_path
 
 
-# TODO: no matter what size I use, same on desktop
 def stretch_wall(wall_path):
     image = Image.open(wall_path)
-    image = image.resize((200, 200), Image.ANTIALIAS)
-    os.remove(wall_path)
-    image = image.save(wall_path)
+    width, height = image.size
+    if width <= 980 and height <= 980:
+        image = image.resize((980, 980), Image.ANTIALIAS)
+        os.remove(wall_path)
+        image = image.save(wall_path)
 
 
 def retract(wall_type):
