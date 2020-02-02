@@ -1,0 +1,10 @@
+from os import system
+import platform
+
+env = platform.system()
+if env == 'Windows':
+    system('pip install wget Image')
+    system('cd breachwall && python breachwall.py')
+elif env == 'Linux':
+    print('unavailable')
+
