@@ -1,6 +1,7 @@
+#! breachwall/Scripts/python
 import breacher
 
-
+# TODO: add argparser in future for helps?
 def main():
     breacher.breach_wall()
 
