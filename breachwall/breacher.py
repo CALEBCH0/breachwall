@@ -35,9 +35,12 @@ def stretch_wall(wall_path):
         image = image.save(wall_path)
 
 
-def retract(wall_type):
+def retract(retract_type, wall_type):
     if wall_type == 'Windows':
-        windows_breacher('C://Users/kmcho/OneDrive/Pictures/dokkaebi_drawing.png')
+        if retract_type == 'rr':
+            windows_breacher('C://Users/kmcho/OneDrive/Pictures/dokkaebi_drawing.png')
+        elif retract_type == 'r':
+            windows_breacher('https://s23527.pcdn.co/wp-content/uploads/2017/09/underexposing_the_scene-768x432.jpg.optimal.jpg')
     elif wall_type == 'Linux':
         print("unavailable")
     elif wall_type == 'Darwin':
@@ -50,10 +53,10 @@ def breach_wall():
     startup = input("start \n")
     if startup == 'k':
         set_wallpaper()
-    elif startup == 'r':
+    elif startup == 'r' or startup == 'rr':
         wall_type = platform.system()
         print("retracting...")
-        retract(wall_type)
+        retract(startup, wall_type)
         print("retracted.")
     else:
         print("breach_wall_error")

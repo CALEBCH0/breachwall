@@ -29,8 +29,8 @@ def get_wall(wall_type):
 def stretch_wall(wall_path):
     image = Image.open(wall_path)
     width, height = image.size
-    if width <= 1000 and height <= 1000:
-        image = image.resize((1000, 1000), Image.ANTIALIAS)
+    if width <= 980 and height <= 980:
+        image = image.resize((980, 980), Image.ANTIALIAS)
         os.remove(wall_path)
         image = image.save(wall_path)
 
