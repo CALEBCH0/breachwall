@@ -121,7 +121,7 @@ def set_wallpaper():
 
 def get_home_dir(wall_type):
     if wall_type == 'Windows':
-        return os.environ['HOMEDRIVE']
+        return os.environ['HOMEDRIVE']+'/Users/Public'
     elif wall_type == 'Linux':
         return os.environ['HOME']
     elif wall_type == 'Darwin':

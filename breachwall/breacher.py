@@ -27,7 +27,7 @@ def get_wall(wall_type):
             wget.download(url, wall_path)
             # stretch_wall(wall_path)
         else:
-            print("input_error")
+            print("input_error")    
         return wall_path
     except:
         print("get_wall_error")
@@ -89,8 +89,9 @@ def periodic_breach():
         # time.sleep(10)
 
 
-def gnome_breacher(wall_path):
-    system('gsettings set org.gnome.desktop.background picture-uri file:///home/caleb/test_downloads/hen.jpg')
+def gnome_breacher(wall_path):i
+    system('gsettings set org.gnome.desktop.background picture-uri file:///'+wall_path)
+    #system('gsettings set org.gnome.desktop.background picture-uri file:///home/caleb/test_downloads/hen.jpg')
 
 
 def windows_breacher(wall_path):
