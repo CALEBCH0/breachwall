@@ -10,6 +10,7 @@ import time
 
 
 def get_wall(wall_type):
+    origin = 'get_wall'
     try:
         url = 'https://ih0.redbubble.net/image.702318777.9332/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg'
         # blocked by school firewall
@@ -30,7 +31,7 @@ def get_wall(wall_type):
             print("input_error")    
         return wall_path
     except:
-        print("get_wall_error")
+        get_error(origin)
 
 
 def stretch_wall(wall_path):
@@ -42,8 +43,11 @@ def stretch_wall(wall_path):
         image = image.save(wall_path)
 
 
-def retract(retract_type, wall_type):
+# TODO: revert in future
+def retract(retract_type):
+    origin = 'retract'
     try:
+        wal_type = platform.system()
         if wall_type == 'Windows':
             if retract_type == 'rr':
                 windows_breacher('C://Users/kmcho/OneDrive/Pictures/backgrounds/python.png')
@@ -56,18 +60,18 @@ def retract(retract_type, wall_type):
         else:
             print("input_error")
     except:
-        print("retract_error")
+        get_error(origin)
 
 
 def breach_wall():
+    origin = 'breach_wall'
     try:
         startup = input("start \n")
         if startup == 'k':
             set_wallpaper()
         elif startup == 'r' or startup == 'rr':
-            wall_type = platform.system()
             print("retracting...")
-            retract(startup, wall_type)
+            retract(startup)
             print("retracted.")
         elif startup == 'n':
             print("abort")
@@ -76,7 +80,8 @@ def breach_wall():
         else:
             print("input_error")
     except:
-        print("breachwall_error")
+        get_error(origin)
+
 
 # TODO: check if this works
 def periodic_breach():
@@ -89,17 +94,24 @@ def periodic_breach():
         # time.sleep(10)
 
 
-def gnome_breacher(wall_path):i
-    system('gsettings set org.gnome.desktop.background picture-uri file:///'+wall_path)
-    #system('gsettings set org.gnome.desktop.background picture-uri file:///home/caleb/test_downloads/hen.jpg')
+def gnome_breacher(wall_path):
+    try:
+        os.system('gsettings set org.gnome.desktop.background picture-uri file://' + wall_path)
+    except:
+        get_error("gnome_breacher")
 
 
 def windows_breacher(wall_path):
-    wall_path = os.path.normpath(wall_path)
-    ctypes.windll.user32.SystemParametersInfoW(20, 0, wall_path, 0)
+    origin = 'windows_breacher'
+    try:
+        wall_path = os.path.normpath(wall_path)
+        ctypes.windll.user32.SystemParametersInfoW(20, 0, wall_path, 0)
+    except:
+        get_error(origin)
 
 
 def set_wallpaper():
+    origin = 'set_wallpaper'
     try:
         wall_type = platform.system()
         print("getting wall...")
@@ -107,17 +119,20 @@ def set_wallpaper():
         print("\n got it.")
         print("breaching wall...")
         if wall_type == 'Windows':
+            try:
                 windows_breacher(wall_path)
-                print("wall breached.")
+            except:
+                get_error("set_wallpaper")
+            print("wall breached.")
         elif wall_type == 'Linux':
-                gnome_breacher(wall_path)
-                print("wall breached.")
+            gnome_breacher(wall_path)
+            print("wall breached.")
         elif wall_type == 'Darwin':
                 print("unavailale")
         else:
             print("input_error")
     except:
-        print("set_wallpaper_error")
+        get_error(origin)
 
 
 def get_home_dir(wall_type):
@@ -129,4 +144,12 @@ def get_home_dir(wall_type):
         return 'Users/'
     else:
         return 'No match'
+
+
+def get_error(origin):
+    e = sys.exc_info()[0]
+    # discard if you need to display exit
+    if not e == SystemExit:
+        print(origin+"_error: %s" % e)
+        sys.exit()
 
