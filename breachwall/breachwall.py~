@@ -14,7 +14,8 @@ def main():
     #     breacher.periodic_breach()
     # else:
     #     print("main_error")
-    breacher.breach_wall();
+    breacher.breach_wall()
+    # breacher.periodic_breach()
 
 
 if __name__ == '__main__':

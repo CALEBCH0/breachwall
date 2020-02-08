@@ -10,23 +10,27 @@ import time
 
 
 def get_wall(wall_type):
-    url = 'https://ih0.redbubble.net/image.702318777.9332/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg'
-    # 'https://i.imgur.com/WpZuQvO.png'
-    if wall_type == 'Windows':
-        wall_path = 'C://Users/Public/hen.jpg'
-        if os.path.isfile(wall_path):
-            os.remove(wall_path)
-        wget.download(url, wall_path)
-        stretch_wall(wall_path)
-    elif wall_type == 'Linux':
-        wall_path = 'home/caleb/test_downloads/hen.jpg'
-        if os.path.isfile(wall_path):
-            os.remove(wall_path)
-        wget.download(url, wall_path)
-        # stretch_wall(wall_path)
-    else:
+    try:
+        url = 'https://ih0.redbubble.net/image.702318777.9332/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg'
+        # blocked by school firewall
+        # 'https://i.imgur.com/WpZuQvO.png'
+        if wall_type == 'Windows':
+            wall_path =  get_home_dir(wall_type)+'/hen.jpg'
+            if os.path.isfile(wall_path):
+                os.remove(wall_path)
+            wget.download(url, wall_path)
+            stretch_wall(wall_path)
+        elif wall_type == 'Linux':
+            wall_path = get_home_dir(wall_type)+'/hen.jpg'
+            if os.path.isfile(wall_path):
+                os.remove(wall_path)
+            wget.download(url, wall_path)
+            # stretch_wall(wall_path)
+        else:
+            print("input_error")
+        return wall_path
+    except:
         print("get_wall_error")
-    return wall_path
 
 
 def stretch_wall(wall_path):
@@ -39,35 +43,40 @@ def stretch_wall(wall_path):
 
 
 def retract(retract_type, wall_type):
-    if wall_type == 'Windows':
-        if retract_type == 'rr':
-            windows_breacher('C://Users/kmcho/OneDrive/Pictures/dokkaebi_drawing.png')
-        elif retract_type == 'r':
-            windows_breacher('https://s23527.pcdn.co/wp-content/uploads/2017/09/underexposing_the_scene-768x432.jpg.optimal.jpg')
-    elif wall_type == 'Linux':
-        print("unavailable")
-    elif wall_type == 'Darwin':
-        print("unavailable")
-    else:
+    try:
+        if wall_type == 'Windows':
+            if retract_type == 'rr':
+                windows_breacher('C://Users/kmcho/OneDrive/Pictures/backgrounds/python.png')
+            elif retract_type == 'r':
+                windows_breacher('https://s23527.pcdn.co/wp-content/uploads/2017/09/underexposing_the_scene-768x432.jpg.optimal.jpg')
+        elif wall_type == 'Linux':
+            print("unavailable")
+        elif wall_type == 'Darwin':
+            print("unavailable")
+        else:
+            print("input_error")
+    except:
         print("retract_error")
 
 
 def breach_wall():
-    startup = input("start \n")
-    if startup == 'k':
-        set_wallpaper()
-    elif startup == 'r' or startup == 'rr':
-        wall_type = platform.system()
-        print("retracting...")
-        retract(startup, wall_type)
-        print("retracted.")
-    elif startup == 'n':
-        print("abort")
-    elif startup == 'at':
-        periodic_breach()
-    else:
-        print("breach_wall_error")
-
+    try:
+        startup = input("start \n")
+        if startup == 'k':
+            set_wallpaper()
+        elif startup == 'r' or startup == 'rr':
+            wall_type = platform.system()
+            print("retracting...")
+            retract(startup, wall_type)
+            print("retracted.")
+        elif startup == 'n':
+            print("abort")
+        elif startup == 'at':
+            periodic_breach()
+        else:
+            print("input_error")
+    except:
+        print("breachwall_error")
 
 # TODO: check if this works
 def periodic_breach():
@@ -90,19 +99,33 @@ def windows_breacher(wall_path):
 
 
 def set_wallpaper():
-    wall_type = platform.system()
-    print("getting wall...")
-    wall_path = get_wall(wall_type)
-    print("\n got it.")
-    print("breaching wall...")
-    if wall_type == 'Windows':
-        windows_breacher(wall_path)
-        print("wall breached.")
-    elif wall_type == 'Linux':
-        gnome_breacher(wall_path)
-        print("wall breached.")
-    elif wall_type == 'Darwin':
-        print("unavailale")
-    else:
+    try:
+        wall_type = platform.system()
+        print("getting wall...")
+        wall_path = get_wall(wall_type)
+        print("\n got it.")
+        print("breaching wall...")
+        if wall_type == 'Windows':
+                windows_breacher(wall_path)
+                print("wall breached.")
+        elif wall_type == 'Linux':
+                gnome_breacher(wall_path)
+                print("wall breached.")
+        elif wall_type == 'Darwin':
+                print("unavailale")
+        else:
+            print("input_error")
+    except:
         print("set_wallpaper_error")
+
+
+def get_home_dir(wall_type):
+    if wall_type == 'Windows':
+        return os.environ['HOMEDRIVE']+'/Users/Public'
+    elif wall_type == 'Linux':
+        return os.environ['HOME']
+    elif wall_type == 'Darwin':
+        return 'Users/'
+    else:
+        return 'No match'
 
