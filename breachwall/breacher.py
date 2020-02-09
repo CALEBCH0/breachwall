@@ -16,7 +16,7 @@ def get_wall(wall_type):
         # blocked by school firewall
         # 'https://i.imgur.com/WpZuQvO.png'
         if wall_type == 'Windows':
-            wall_path =  get_home_dir(wall_type)+'/hen.jpg'
+            wall_path =  get_home_dir(wall_type)+'\\hen.jpg'
             if os.path.isfile(wall_path):
                 os.remove(wall_path)
             wget.download(url, wall_path)
@@ -28,7 +28,7 @@ def get_wall(wall_type):
             wget.download(url, wall_path)
             # stretch_wall(wall_path)
         else:
-            print("input_error")    
+            print("get_wall_input_error")    
         return wall_path
     except:
         get_error(origin)
@@ -43,14 +43,15 @@ def stretch_wall(wall_path):
         image = image.save(wall_path)
 
 
-# TODO: revert in future
+# TODO: outdated
 def retract(retract_type):
     origin = 'retract'
     try:
-        wal_type = platform.system()
+        wall_type = platform.system()
         if wall_type == 'Windows':
             if retract_type == 'rr':
-                windows_breacher('C://Users/kmcho/OneDrive/Pictures/backgrounds/python.png')
+                revert(retract_type)
+                # windows_breacher('C://Users/kmcho/OneDrive/Pictures/backgrounds/python.png')
             elif retract_type == 'r':
                 windows_breacher('https://s23527.pcdn.co/wp-content/uploads/2017/09/underexposing_the_scene-768x432.jpg.optimal.jpg')
         elif wall_type == 'Linux':
@@ -63,27 +64,59 @@ def retract(retract_type):
         get_error(origin)
 
 
+# CachedFiles does not always contain wallpapers & there could be multiple
+# TODO: find way to get the current background - can't open transcodedwallpaper
+# https://superuser.com/questions/966650/path-to-current-desktop-backgrounds-in-windows-10
+# TODO: typeerror - where the hell is it coming from?
+def revert(revert_type):
+    origin = 'revert'
+    try:
+        if revert_type == 'rv':
+            wall_type = platform.system()
+            if wall_type == 'Windows':
+                dir = os.environ['APPDATA']+'\\Microsoft\\Windows\\Themes\\CachedFiles'
+                for  x in os.listdir(dir):
+                    path = dir + "\\" + x
+                # path = os.environ['APPDATA']+'\\Microsoft\\Windows\\Themes\\TranscodedWallpaper'
+                # path = os.environ['APPDATA']+'\\Microsoft\\Windows\\Themes\\TranscodedWallpaper'
+                # target = os.environ['APPDATA']+'\\Microsoft\\Windows\\Themes\\TranscodedWallpaper.jpg'
+                # shutil.copyfile(path, target)
+                window_breacher(path)
+            elif wall_type == 'Linux':
+                print("no")
+            elif wall_type == 'Darwin':
+                print("no")
+            else:
+                print("revert_input_error")
+        elif revert_type == 'rr':
+            windows_breacher('C://Users/kmcho/OneDrive/Pictures/backgrounds/python.png')
+    except:
+        e = sys.exc_info()[0]
+        print('this '+e)
+        # get_error(origin)
+   
+
 def breach_wall():
     origin = 'breach_wall'
     try:
         startup = input("start \n")
         if startup == 'k':
             set_wallpaper()
-        elif startup == 'r' or startup == 'rr':
-            print("retracting...")
-            retract(startup)
-            print("retracted.")
+        elif startup == 'rv' or startup == 'rr':
+            print("reverting...")
+            revert(startup)
+            print("reverted.")
         elif startup == 'n':
             print("abort")
         elif startup == 'at':
             periodic_breach()
         else:
-            print("input_error")
+            print("breach_wall_input_error")
     except:
         get_error(origin)
 
 
-# TODO: check if this works
+# TODO: minimize the console during operation && way to stop while running
 def periodic_breach():
     set_wallpaper()
     # for test, do seconds
@@ -119,10 +152,7 @@ def set_wallpaper():
         print("\n got it.")
         print("breaching wall...")
         if wall_type == 'Windows':
-            try:
-                windows_breacher(wall_path)
-            except:
-                get_error("set_wallpaper")
+            windows_breacher(wall_path)
             print("wall breached.")
         elif wall_type == 'Linux':
             gnome_breacher(wall_path)
@@ -130,14 +160,14 @@ def set_wallpaper():
         elif wall_type == 'Darwin':
                 print("unavailale")
         else:
-            print("input_error")
+            print("set_wallpaper_input_error")
     except:
         get_error(origin)
 
 
 def get_home_dir(wall_type):
     if wall_type == 'Windows':
-        return os.environ['HOMEDRIVE']+'/Users/Public'
+        return os.environ['HOMEDRIVE']+'\\Users\\Public'
     elif wall_type == 'Linux':
         return os.environ['HOME']
     elif wall_type == 'Darwin':
@@ -149,7 +179,9 @@ def get_home_dir(wall_type):
 def get_error(origin):
     e = sys.exc_info()[0]
     # discard if you need to display exit
-    if not e == SystemExit:
-        print(origin+"_error: %s" % e)
-        sys.exit()
+    # if not e == SystemExit:
+        # print(origin+"_error: %s" % e)
+        # sys.exit()
+    print(origin+"_error: %s" % e)
+    sys.exit()
 
