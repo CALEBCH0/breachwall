@@ -98,13 +98,14 @@ def revert(revert_type):
    
 
 def breach_wall():
-    print(dejavu.is_dejavu)
-    saveOrigin(dejavu.is_dejavu)
+    print("in breach_wall: %s, %s" % (dejavu.is_dejavu, dejavu.is_breached)) 
     name = 'breach_wall'
     startup = input("start \n")
     if startup == 'k':
+        saveOrigin(dejavu.is_dejavu, dejavu.is_breached)
         set_wallpaper()
     elif startup == 'rv' or startup == 'rr':
+        saveOrigin(dejavu.is_dejavu, dejavu.is_breached)
         print("reverting...")
         revert(startup)
         print("reverted.")
@@ -143,19 +144,28 @@ def windows_breacher(wall_path):
         get_error(origin)
 
 
-def saveOrigin(breached):
-    if not breached:
+def saveOrigin(dejavu, breached):
+    lines = open('dejavu.py').read().splitlines()
+    if not breached and not dejavu:
         origin = os.path.normpath('C://Users/kmcho/AppData/Roaming/Microsoft/Windows/Themes/TranscodedWallpaper')
         target = os.path.normpath('C://Users/kmcho/AppData/Roaming/Microsoft/Windows/Themes/TranscodedWallpaper.jpg')
         shutil.copyfile(origin, target) 
-        with open('dejavu.py', "w") as f:
-            f.write("is_dejavu = True")
-    print(breached)
-    if breached:
-        with open('devaju.py', 'w') as f:
-            f.write('is_dejavu = False')
-    print(breached)
-
+        lines[0] = 'is_dejavu = True'
+        lines[1] = 'is_breached = True'
+        open('dejavu.py', 'w').write('\n'.join(lines))
+        #with open('dejavu.py', "w") as f:
+        #    f.write('is_dejavu = True\nis_breached = True')
+    if breached and not dejavu:
+        lines[0] = 'is_dejavu = False'
+        lines[1] = 'is_breached = False'
+        open('dejavu.py', 'w').write('\n'.join(lines))
+        #with open('dejavu.py', 'w') as f:
+        #    f.write('is_dejavu = False\nis_breached = False')
+    if dejavu:
+        lines[0] = 'is_dejavu = False'
+        open('dejavu.py', 'w').write('\n'.join(lines))
+        #with open('dejavu.py', 'w') as f:
+        #    f.write('is_dejavu = ')
 
 def set_wallpaper():    
     name = 'set_wallapper'
@@ -191,6 +201,7 @@ def get_home_dir(wall_type):
 
 
 # name doesn't ring
+# on hold because I'm not sure whether it cathes new errors or just prints the same
 def get_error(name):
     e = sys.exc_info()[0]
     # discard if you need to display exit
