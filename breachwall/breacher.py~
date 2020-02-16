@@ -8,6 +8,7 @@ from PIL import Image
 import schedule
 import time
 import shutil
+import keyboard
 
 import dejavu
 
@@ -100,15 +101,20 @@ def revert(revert_type):
 def breach_wall():
     print("in breach_wall: %s, %s" % (dejavu.is_dejavu, dejavu.is_breached)) 
     name = 'breach_wall'
+    saveOrigin()
     startup = input("start \n")
     if startup == 'k':
-        saveOrigin(dejavu.is_dejavu, dejavu.is_breached)
         set_wallpaper()
+        set_dejavu(False, True)
     elif startup == 'rv' or startup == 'rr':
-        saveOrigin(dejavu.is_dejavu, dejavu.is_breached)
-        print("reverting...")
-        revert(startup)
-        print("reverted.")
+        if not dejavu.is_dejavu:
+            if dejavu.is_breached:        
+                print("reverting...")
+                revert(startup)
+                print("reverted.")
+                set_dejavu(True, False)
+            if not dejavu.is_breached:
+                set_dejavu(True, False)
     elif startup == 'n':
         print("abort")
     elif startup == 'at':
@@ -123,10 +129,12 @@ def periodic_breach():
     # for test, do seconds
     schedule.every().seconds.do(set_wallpaper)
     while True:
+        if keyboard.is_pressed('q'):
+            print("periodic breach ended")
+            break
         schedule.run_pending()
-        # maybe I don't need this? sleep after code execution
-        # time.sleep(10)
-
+        time.sleep(4)
+    
 
 def gnome_breacher(wall_path):
     try:
@@ -144,16 +152,42 @@ def windows_breacher(wall_path):
         get_error(origin)
 
 
-def saveOrigin(dejavu, breached):
-    if not breached and not dejavu:
+# on hold
+#def saveOrigin(dejavu, breached):
+#    lines = open('dejavu.py').read().splitlines()
+#    if not breached and not dejavu:
+#        origin = os.path.normpath('C://Users/kmcho/AppData/Roaming/Microsoft/Windows/Themes/TranscodedWallpaper')
+#        target = os.path.normpath('C://Users/kmcho/AppData/Roaming/Microsoft/Windows/Themes/TranscodedWallpaper.jpg')
+#        shutil.copyfile(origin, target) 
+#        lines[0] = 'is_dejavu = True'
+#        lines[1] = 'is_breached = True'
+#        open('dejavu.py', 'w').write('\n'.join(lines))
+#        #with open('dejavu.py', "w") as f:
+#        #    f.write('is_dejavu = True\nis_breached = True')
+#    if breached and not dejavu:
+#        lines[0] = 'is_dejavu = False'
+#        lines[1] = 'is_breached = False'
+#        open('dejavu.py', 'w').write('\n'.join(lines))
+#        #with open('dejavu.py', 'w') as f:
+#        #    f.write('is_dejavu = False\nis_breached = False')
+#    if dejavu:
+#        lines[0] = 'is_dejavu = False'
+#        open('dejavu.py', 'w').write('\n'.join(lines))
+#        #with open('dejavu.py', 'w') as f:
+#        #    f.write('is_dejavu = ')
+
+def saveOrigin():
+    if not dejavu.is_breached:
         origin = os.path.normpath('C://Users/kmcho/AppData/Roaming/Microsoft/Windows/Themes/TranscodedWallpaper')
         target = os.path.normpath('C://Users/kmcho/AppData/Roaming/Microsoft/Windows/Themes/TranscodedWallpaper.jpg')
-        shutil.copyfile(origin, target) 
-        with open('dejavu.py', "w") as f:
-            f.write('is_dejavu = True\nis_breached = True')
-    if breached and not dejavu:
-        with open('dejavu.py', 'w') as f:
-            f.write('is_dejavu = False\nis_breached = False')
+        shutil.copyfile(origin, target)
+
+        
+def set_dejavu(rv_dejavu, breached):
+    lines = open('dejavu.py').read().splitlines()
+    lines[0] = 'is_dejavu = %s' % rv_dejavu
+    lines[1] = 'is_breached = %s' % breached
+    open('dejavu.py', 'w').write('\n'.join(lines))
 
 
 def set_wallpaper():    

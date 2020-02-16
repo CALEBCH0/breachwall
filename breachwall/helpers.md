@@ -333,3 +333,27 @@ with open(__file__,"w") as f:
         f.write(content[i])
 
 ### modify files end ###
+
+### revert flowchart begin ###
+
+start 
+if not breached
+    copy
+
+operation?
+if ops = k
+    setwall
+    rv_dejavu = false
+    breached = true
+elif ops = rv
+    if not rv_dejavu
+        if breached
+            revert
+            set_dejavu(rv_dejavu, breached)
+            breached = false
+            rv_dejavu = true
+        if not breached
+            rv_dejavu = true
+            breached = false
+
+### revert flowchart end ###
