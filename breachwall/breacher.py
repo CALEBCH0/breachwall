@@ -7,12 +7,17 @@ import wget
 from PIL import Image
 import schedule
 import time
+import shutil
+
+import dejavu
 
 
 def get_wall(wall_type):
-    origin = 'get_wall'
+    name = 'get_wall'
     try:
-        url = 'https://ih0.redbubble.net/image.702318777.9332/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg'
+        # not so messed up version
+        url = 'https://i.kym-cdn.com/photos/images/newsfeed/000/063/585/1209077053849_jpg__roflposters_com__myspace.jpg'
+        # 'https://ih0.redbubble.net/image.702318777.9332/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg'
         # blocked by school firewall
         # 'https://i.imgur.com/WpZuQvO.png'
         if wall_type == 'Windows':
@@ -31,7 +36,7 @@ def get_wall(wall_type):
             print("get_wall_input_error")    
         return wall_path
     except:
-        get_error(origin)
+        get_error(name)
 
 
 def stretch_wall(wall_path):
@@ -45,7 +50,7 @@ def stretch_wall(wall_path):
 
 # TODO: outdated
 def retract(retract_type):
-    origin = 'retract'
+    name = 'retract'
     try:
         wall_type = platform.system()
         if wall_type == 'Windows':
@@ -61,59 +66,54 @@ def retract(retract_type):
         else:
             print("input_error")
     except:
-        get_error(origin)
+        get_error(name)
 
 
-# CachedFiles does not always contain wallpapers & there could be multiple
-# TODO: find way to get the current background - can't open transcodedwallpaper
+# CachedFiles works by deleting the folder every time there is a change but it sometimes doesn't work 
 # https://superuser.com/questions/966650/path-to-current-desktop-backgrounds-in-windows-10
-# TODO: typeerror - where the hell is it coming from?
 def revert(revert_type):
-    origin = 'revert'
-    try:
-        if revert_type == 'rv':
-            wall_type = platform.system()
-            if wall_type == 'Windows':
-                dir = os.environ['APPDATA']+'\\Microsoft\\Windows\\Themes\\CachedFiles'
-                for  x in os.listdir(dir):
-                    path = dir + "\\" + x
+    name = 'revert'
+    if revert_type == 'rv':
+        wall_type = platform.system()
+        if wall_type == 'Windows':
+            # windows_breacher(os.environ['APPDATA']+'\\Microsoft\\Windows\\Themes\\CachedFiles')
+            windows_breacher(os.environ['APPDATA']+'\\Microsoft\\Windows\\Themes\\TranscodedWallpaper.jpg')
+            # saveOrigin(True)
+            # dir = os.environ['APPDATA']+'\\Microsoft\\Windows\\Themes\\CachedFiles'
+            # for  x in os.listdir(dir):
+                # path = dir + "\\" + x
                 # path = os.environ['APPDATA']+'\\Microsoft\\Windows\\Themes\\TranscodedWallpaper'
                 # path = os.environ['APPDATA']+'\\Microsoft\\Windows\\Themes\\TranscodedWallpaper'
                 # target = os.environ['APPDATA']+'\\Microsoft\\Windows\\Themes\\TranscodedWallpaper.jpg'
                 # shutil.copyfile(path, target)
-                window_breacher(path)
-            elif wall_type == 'Linux':
-                print("no")
-            elif wall_type == 'Darwin':
-                print("no")
-            else:
-                print("revert_input_error")
-        elif revert_type == 'rr':
-            windows_breacher('C://Users/kmcho/OneDrive/Pictures/backgrounds/python.png')
-    except:
-        e = sys.exc_info()[0]
-        print('this '+e)
-        # get_error(origin)
+            # windows_breacher(path)
+        elif wall_type == 'Linux':
+            print("no")
+        elif wall_type == 'Darwin':
+            print("no")
+        else:
+            print("revert_input_error")
+    elif revert_type == 'rr':
+        windows_breacher('C://Users/kmcho/OneDrive/Pictures/backgrounds/python.png')
    
 
 def breach_wall():
-    origin = 'breach_wall'
-    try:
-        startup = input("start \n")
-        if startup == 'k':
-            set_wallpaper()
-        elif startup == 'rv' or startup == 'rr':
-            print("reverting...")
-            revert(startup)
-            print("reverted.")
-        elif startup == 'n':
-            print("abort")
-        elif startup == 'at':
-            periodic_breach()
-        else:
-            print("breach_wall_input_error")
-    except:
-        get_error(origin)
+    print(dejavu.is_dejavu)
+    saveOrigin(dejavu.is_dejavu)
+    name = 'breach_wall'
+    startup = input("start \n")
+    if startup == 'k':
+        set_wallpaper()
+    elif startup == 'rv' or startup == 'rr':
+        print("reverting...")
+        revert(startup)
+        print("reverted.")
+    elif startup == 'n':
+        print("abort")
+    elif startup == 'at':
+        periodic_breach()
+    else:
+        print("breach_wall_input_error")
 
 
 # TODO: minimize the console during operation && way to stop while running
@@ -143,8 +143,22 @@ def windows_breacher(wall_path):
         get_error(origin)
 
 
-def set_wallpaper():
-    origin = 'set_wallpaper'
+def saveOrigin(breached):
+    if not breached:
+        origin = os.path.normpath('C://Users/kmcho/AppData/Roaming/Microsoft/Windows/Themes/TranscodedWallpaper')
+        target = os.path.normpath('C://Users/kmcho/AppData/Roaming/Microsoft/Windows/Themes/TranscodedWallpaper.jpg')
+        shutil.copyfile(origin, target) 
+        with open('dejavu.py', "w") as f:
+            f.write("is_dejavu = True")
+    print(breached)
+    if breached:
+        with open('devaju.py', 'w') as f:
+            f.write('is_dejavu = False')
+    print(breached)
+
+
+def set_wallpaper():    
+    name = 'set_wallapper'
     try:
         wall_type = platform.system()
         print("getting wall...")
@@ -162,7 +176,7 @@ def set_wallpaper():
         else:
             print("set_wallpaper_input_error")
     except:
-        get_error(origin)
+        get_error(name)
 
 
 def get_home_dir(wall_type):
@@ -176,12 +190,13 @@ def get_home_dir(wall_type):
         return 'No match'
 
 
-def get_error(origin):
+# name doesn't ring
+def get_error(name):
     e = sys.exc_info()[0]
     # discard if you need to display exit
     # if not e == SystemExit:
         # print(origin+"_error: %s" % e)
         # sys.exit()
-    print(origin+"_error: %s" % e)
+    print(name+"_error: %s" % e)
     sys.exit()
 
